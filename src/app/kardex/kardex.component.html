@@ -1,0 +1,68 @@
+<p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="Nueva entrada" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="kDialog()"></button>
+    </ng-template>
+</p-toolbar>
+
+<p-toast position="top-right"></p-toast>
+
+<p-table [value]="kardexs" dataKey="kardex" [tableStyle]="{'min-width': '60rem'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="id">id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="tipoOperacion" style="text-align: center;">Tipo Operacion <p-sortIcon field="producto"></p-sortIcon></th>
+            <th pSortableColumn="producto.concepto" style="text-align: center;">producto <p-sortIcon field="producto"></p-sortIcon></th>
+            <th pSortableColumn="descripcion" style="text-align: center;">Descripcion <p-sortIcon field="descripcion"></p-sortIcon></th>
+            <th pSortableColumn="cantidad" style="text-align: center;">Cantidad<p-sortIcon field="cantidad"></p-sortIcon></th>
+            <th pSortableColumn="valor" style="text-align: center;">Valor <p-sortIcon field="valor"></p-sortIcon></th>
+            <th pSortableColumn="fecha" style="text-align: center;">Fecha <p-sortIcon field="fecha"></p-sortIcon></th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-kardex let-expanded="expanded">
+        <tr>
+            <td style="text-align: left;">{{kardex.id}}</td>
+            <td style="text-align: center;">{{kardex.tipoOperacion}}</td>
+            <td style="text-align: center;">{{kardex.producto?.concepto}}</td>
+            <td style="text-align: center;">{{kardex.descripcion}}</td>
+            <td style="text-align: center;">{{kardex.cantidad}}</td>
+            <td style="text-align: center;">{{kardex.valor | currency: 'COP '}}</td>
+            <td style="text-align: center;">{{kardex.fecha | date : 'dd/MM/yyyy HH:mm:ss'}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="kardexDialog" [style]="{width: '450px'}" header="Crear Entrada" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="producto">Producto</label>
+            <p-autoComplete [(ngModel)]="kardex.producto" [suggestions]="productos" (completeMethod)="traerProductos()" [dropdown]="true" field="concepto">
+                <ng-template let-producto pTemplate="nombre">
+                    <div class="country-item">
+                      <div>{{producto.concepto}}</div>
+                    </div>
+                  </ng-template>
+            </p-autoComplete>
+        </div>
+
+        <div class="p-field">
+            <label for="cantidad">Cantidad</label>
+            <p-inputNumber [(ngModel)]="kardex.cantidad" [showButtons]="true" mode="decimal" [min]="1"></p-inputNumber>
+        </div>
+
+        <div class="p-field">
+            <label for="valorUnitario">Valor unitario</label>
+            <input style="text-align: right;" type="text" pInputText id="valorUnitario" name="valorUnitario" [(ngModel)]="kardex.valor" />
+        </div>
+
+        <div class="p-field">
+            <label for="valorUnitario">Drecripcion</label>
+            <input type="text" pInputText id="valorUnitario" name="valorUnitario" value="Entrada por alcamen" disabled/>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="kDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="crearIngreso()"></button>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,65 @@
+<p-toolbar styleClass="p-mb-4">
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="Nueva factura" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="fDialog()"></button>
+    </ng-template>
+</p-toolbar>
+
+<p-toast position="top-right"></p-toast>
+
+<p-table [value]="facturas" dataKey="factura" [tableStyle]="{'min-width': '60rem'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="id">id <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="producto.concepto" style="text-align: center;">producto <p-sortIcon field="producto"></p-sortIcon></th>
+            <th pSortableColumn="cantidad" style="text-align: center;">cantidad <p-sortIcon field="cantidad"></p-sortIcon></th>
+            <th pSortableColumn="valorUnitario" style="text-align: center;">Valor Unitario <p-sortIcon field="valorUnitario"></p-sortIcon></th>
+            <th pSortableColumn="valorTotal" style="text-align: center;">Valor Total <p-sortIcon field="valorTotal"></p-sortIcon></th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-factura let-expanded="expanded">
+        <tr>
+            <td style="text-align: left;">{{factura.id}}</td>
+            <td style="text-align: center;">{{factura.producto.concepto}}</td>
+            <td style="text-align: center;">{{factura.cantidad}}</td>
+            <td style="text-align: center;">{{factura.valorUnitario | currency: 'COP '}}</td>
+            <td style="text-align: center;">{{factura.valorTotal | currency: 'COP '}}</td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="facturaDialog" [style]="{width: '450px'}" header="Crear Factura" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label for="producto">Producto</label>
+            <p-autoComplete [(ngModel)]="factura.producto" [suggestions]="productos" (completeMethod)="traerProductos()" [dropdown]="true" field="concepto">
+                <ng-template let-producto pTemplate="nombre">
+                    <div class="country-item">
+                      <div>{{producto.concepto}}</div>
+                    </div>
+                  </ng-template>
+            </p-autoComplete>
+        </div>
+
+        <div class="p-field">
+            <label for="cantidad">Cantidad</label>
+            <p-inputNumber [(ngModel)]="factura.cantidad" [showButtons]="true" mode="decimal" [min]="1"></p-inputNumber>
+        </div>
+
+        <div class="p-field">
+            <label for="valorUnitario">valor unitario</label>
+            <input style="text-align: right;" type="text" pInputText id="valorUnitario" name="valorUnitario" [(ngModel)]="factura.valorUnitario" />
+        </div>
+
+        <div class="p-field">
+            <label for="valorUnitario">valor total</label>
+            <input style="text-align: right;" type="text" pInputText id="valorUnitario" name="valorUnitario" [value]="'$ ' + factura.valorUnitario * factura.cantidad" disabled />
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="fDialog()"></button>
+        <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="crearFactura()"></button>
+    </ng-template>
+</p-dialog>
