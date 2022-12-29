@@ -32,6 +32,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {AutoCompleteModule} from 'primeng/autocomplete';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {ToastModule} from 'primeng/toast';
+import {CardModule} from 'primeng/card';
 
 import {MessageService} from 'primeng/api';
 
@@ -59,7 +60,8 @@ import {MessageService} from 'primeng/api';
     InputTextModule,
     AutoCompleteModule,
     InputNumberModule,
-    ToastModule
+    ToastModule,
+    CardModule
   ],
   providers: [Globals,InventarioService,ProductoService,KardexService,FacturaService,MessageService],
   bootstrap: [AppComponent]
